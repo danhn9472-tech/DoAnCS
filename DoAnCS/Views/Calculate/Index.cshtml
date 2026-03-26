@@ -1,0 +1,244 @@
+﻿@{
+    ViewData["Title"] = "Tính toán Calo - NutriCook";
+}
+
+<style>
+    :root {
+        --card-shadow: 0 10px 30px rgba(15, 42, 29, 0.08);
+    }
+
+    /* Tiêu đề trang */
+    .calc-header {
+        text-align: center;
+        padding: 3rem 0;
+        background: linear-gradient(135deg, var(--color-deep), var(--color-darkest));
+        color: white;
+        border-radius: 30px;
+        margin-bottom: 3rem;
+    }
+
+    /* Khu vực bảng tính */
+    .calc-container {
+        background: white;
+        border-radius: 25px;
+        padding: 2rem;
+        border: 1px solid var(--color-pale);
+        box-shadow: var(--card-shadow);
+    }
+
+    .ingredient-row {
+        background: var(--color-pale);
+        border-radius: 15px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: 0.3s;
+        border: 1px solid transparent;
+    }
+
+        .ingredient-row:hover {
+            border-color: var(--color-medium);
+            background: white;
+        }
+
+    /* Các ô input */
+    .form-select, .form-control {
+        border-radius: 10px;
+        border: 1px solid var(--color-light);
+        padding: 0.6rem;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(107, 144, 113, 0.2);
+            border-color: var(--color-medium);
+        }
+
+    /* Nút bấm */
+    .btn-add-row {
+        color: var(--color-deep);
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-calculate {
+        background-color: var(--color-darkest);
+        color: white;
+        border-radius: 50px;
+        padding: 12px 40px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        border: none;
+        transition: 0.3s;
+        width: 100%;
+    }
+
+        .btn-calculate:hover {
+            background-color: var(--color-deep);
+            transform: translateY(-2px);
+        }
+
+    /* Bảng kết quả */
+    .result-box {
+        display: none; /* Ẩn lúc đầu */
+        margin-top: 3rem;
+        padding: 2rem;
+        border-radius: 25px;
+        background: var(--color-darkest);
+        color: white;
+    }
+
+    .stat-circle {
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 900;
+        display: block;
+        color: var(--color-light);
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.8;
+    }
+</style>
+
+<div class="container mb-5">
+    <div class="calc-header">
+        <h1 class="fw-bold">Máy Tính Dinh Dưỡng</h1>
+        <p class="opacity-75">Chọn nguyên liệu và khối lượng để biết giá trị dinh dưỡng bữa ăn của bạn</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="calc-container">
+                <form id="caloForm">
+                    <div id="ingredientList">
+                        <div class="row ingredient-row align-items-center">
+                            <div class="col-md-5 mb-2 mb-md-0">
+                                <label class="small fw-bold text-muted">Nguyên liệu</label>
+                                <select class="form-select ingredient-select">
+                                    <option value="0" data-kcal="0" data-p="0" data-f="0" data-c="0">Chọn thực phẩm...</option>
+                                    <option value="1" data-kcal="165" data-p="31" data-f="3.6" data-c="0">Ức gà (100g)</option>
+                                    <option value="2" data-kcal="130" data-p="2.7" data-f="0.3" data-c="28">Cơm trắng (100g)</option>
+                                    <option value="3" data-kcal="160" data-p="2" data-f="15" data-c="9">Quả bơ (100g)</option>
+                                    <option value="4" data-kcal="155" data-p="13" data-f="11" data-c="1.1">Trứng gà (1 quả/100g)</option>
+                                    <option value="5" data-kcal="250" data-p="25" data-f="15" data-c="0">Thịt bò nạc (100g)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-2 mb-md-0">
+                                <label class="small fw-bold text-muted">Khối lượng (g)</label>
+                                <input type="number" class="form-control weight-input" placeholder="Ví dụ: 200" min="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="small fw-bold text-muted">Đơn vị</label>
+                                <input type="text" class="form-control bg-light" value="Gram" readonly>
+                            </div>
+                            <div class="col-md-1 text-end mt-3 mt-md-0">
+                                <button type="button" class="btn btn-link text-danger p-0 btn-remove"><i class="bi bi-trash3-fill"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="javascript:void(0)" class="btn-add-row" onclick="addRow()">
+                        <i class="bi bi-plus-circle-fill"></i> Thêm nguyên liệu khác
+                    </a>
+
+                    <button type="button" class="btn btn-calculate mt-4" onclick="calculateStats()">
+                        TÍNH TOÁN DINH DƯỠNG
+                    </button>
+                </form>
+            </div>
+
+            <div class="result-box" id="resultBox">
+                <h3 class="text-center mb-4 fw-bold">Tổng giá trị dinh dưỡng</h3>
+                <div class="row">
+                    <div class="col-6 col-md-3 stat-circle">
+                        <span class="stat-value" id="totalKcal">0</span>
+                        <span class="stat-label">Calories (kcal)</span>
+                    </div>
+                    <div class="col-6 col-md-3 stat-circle">
+                        <span class="stat-value" id="totalProtein">0</span>
+                        <span class="stat-label">Protein (g)</span>
+                    </div>
+                    <div class="col-6 col-md-3 stat-circle">
+                        <span class="stat-value" id="totalFat">0</span>
+                        <span class="stat-label">Fat (g)</span>
+                    </div>
+                    <div class="col-6 col-md-3 stat-circle">
+                        <span class="stat-value" id="totalCarb">0</span>
+                        <span class="stat-label">Carbs (g)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Hàm thêm hàng mới
+    function addRow() {
+        const firstRow = document.querySelector('.ingredient-row');
+        const newRow = firstRow.cloneNode(true);
+        
+        // Reset giá trị của hàng mới
+        newRow.querySelector('.ingredient-select').value = "0";
+        newRow.querySelector('.weight-input').value = "";
+        
+        document.getElementById('ingredientList').appendChild(newRow);
+        
+        // Gán sự kiện xóa cho nút mới
+        newRow.querySelector('.btn-remove').onclick = function() {
+            if(document.querySelectorAll('.ingredient-row').length > 1) {
+                newRow.remove();
+            }
+        };
+    }
+
+    // Gán sự kiện xóa cho hàng đầu tiên
+    document.querySelector('.btn-remove').onclick = function() {
+        if(document.querySelectorAll('.ingredient-row').length > 1) {
+            this.closest('.ingredient-row').remove();
+        }
+    };
+
+    // Hàm tính toán chính
+    function calculateStats() {
+        let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
+        const rows = document.querySelectorAll('.ingredient-row');
+
+        rows.forEach(row => {
+            const select = row.querySelector('.ingredient-select');
+            const weight = parseFloat(row.querySelector('.weight-input').value) || 0;
+            
+            // Lấy dữ liệu từ data-attributes (mặc định trên 100g)
+            const kcalPer100 = parseFloat(select.selectedOptions[0].dataset.kcal);
+            const pPer100 = parseFloat(select.selectedOptions[0].dataset.p);
+            const fPer100 = parseFloat(select.selectedOptions[0].dataset.f);
+            const cPer100 = parseFloat(select.selectedOptions[0].dataset.c);
+
+            // Công thức: (Chỉ số / 100) * khối lượng nhập vào
+            totalKcal += (kcalPer100 / 100) * weight;
+            totalP += (pPer100 / 100) * weight;
+            totalF += (fPer100 / 100) * weight;
+            totalC += (cPer100 / 100) * weight;
+        });
+
+        // Hiển thị kết quả (làm tròn 1 chữ số thập phân)
+        document.getElementById('totalKcal').innerText = totalKcal.toFixed(0);
+        document.getElementById('totalProtein').innerText = totalP.toFixed(1);
+        document.getElementById('totalFat').innerText = totalF.toFixed(1);
+        document.getElementById('totalCarb').innerText = totalC.toFixed(1);
+
+        // Hiệu ứng hiện bảng kết quả
+        const resBox = document.getElementById('resultBox');
+        resBox.style.display = 'block';
+        resBox.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
