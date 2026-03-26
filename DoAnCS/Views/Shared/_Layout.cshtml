@@ -1,76 +1,122 @@
-﻿﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebBanHang</title>
+    <title>@ViewData["Title"] - NutriCook</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
     <style>
             :root {
-                /* Định nghĩa bảng màu chuyên nghiệp */
-                --bg-body: #f0f2f5; /* Màu nền tổng thể (xám xanh dịu) */
-                --bg-nav: #ffffff; /* Màu nền Navbar */
-                --primary-color: #4e73df; /* Màu xanh thương hiệu */
-                --text-main: #3a3b45; /* Màu chữ chính */
+                /* Palette màu từ ảnh của bạn */
+                --color-darkest: #0F2A1D; /* Xanh đậm nhất - dùng cho Text tiêu đề, Hover mạnh */
+                --color-deep: #375534; /* Xanh rừng - dùng cho Brand, Button chính */
+                --color-medium: #6B9071; /* Xanh lá vừa - dùng cho Icons, Trạng thái hover */
+                --color-light: #AEC3B0; /* Xanh nhạt - dùng cho Border, Background phụ */
+                --color-pale: #E3EED4; /* Xanh kem - dùng cho Nền (Background body) */
+            
+                --white: #ffffff;
             }
 
             body {
                 font-family: 'Inter', sans-serif;
-                background-color: var(--bg-body); /* Áp dụng màu nền mới */
-                color: var(--text-main);
+                background-color: var(--color-pale); /* Màu nền nhat nhất từ palette */
+                color: var(--color-darkest);
                 display: flex;
                 flex-direction: column;
                 min-height: 100vh;
             }
 
-            /* Navbar với hiệu ứng kính mờ (Glassmorphism) nhẹ */
+            /* Navbar */
             .navbar {
-                background-color: rgba(255, 255, 255, 0.95) !important;
-                backdrop-filter: blur(10px); /* Làm mờ nhẹ phần nền phía sau khi cuộn */
-                box-shadow: 0 1px 15px rgba(0,0,0,0.05);
-                padding: 0.7rem 0;
+                background-color: rgba(255, 255, 255, 0.9) !important;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 2px 10px rgba(15, 42, 29, 0.05);
+                padding: 0.8rem 0;
             }
 
             .navbar-brand {
                 font-weight: 800;
-                color: var(--primary-color) !important;
+                color: var(--color-deep) !important;
                 letter-spacing: -0.5px;
+                font-size: 1.4rem;
             }
 
-            /* Các liên kết trên menu */
+            /* Nav Links */
             .nav-link {
-                font-weight: 500;
-                color: #5a5c69 !important;
-                padding: 0.5rem 1.2rem !important;
+                font-weight: 600;
+                color: var(--color-deep) !important;
+                padding: 0.5rem 1rem !important;
+                margin: 0 0.2rem;
                 border-radius: 8px;
-                transition: all 0.2s ease-in-out;
+                transition: all 0.2s ease;
             }
 
                 .nav-link:hover {
-                    background-color: rgba(78, 115, 223, 0.1);
-                    color: var(--primary-color) !important;
+                    background-color: var(--color-light);
+                    color: var(--color-darkest) !important;
                 }
 
-            /* Padding cho phần nội dung chính để cân đối với background */
-            .main-container {
-                flex: 1;
-                padding-top: 2.5rem;
-                padding-bottom: 4rem;
+            /* Thanh Search mới */
+            .search-container {
+                position: relative;
+                max-width: 250px;
             }
 
-            /* Footer đồng bộ màu nền */
+            .search-input {
+                background-color: var(--color-pale);
+                border: 1px solid var(--color-light);
+                border-radius: 20px;
+                padding: 0.4rem 1rem 0.4rem 2.5rem;
+                font-size: 0.9rem;
+                transition: all 0.3s;
+            }
+
+                .search-input:focus {
+                    outline: none;
+                    box-shadow: 0 0 0 3px rgba(107, 144, 113, 0.2);
+                    border-color: var(--color-medium);
+                    background-color: var(--white);
+                }
+
+            .search-icon {
+                position: absolute;
+                left: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--color-medium);
+            }
+
+            /* Content Area */
+            .main-container {
+                flex: 1;
+                padding-top: 3rem;
+            }
+
+            /* Footer */
             footer {
-                background-color: #ffffff;
-                padding: 2rem 0;
-                border-top: 1px solid #e3e6f0;
+                background-color: var(--color-darkest);
+                color: var(--color-pale);
+                padding: 3rem 0;
                 margin-top: auto;
+            }
+
+                footer a {
+                    color: var(--color-light) !important;
+                    text-decoration: none;
+                    transition: 0.3s;
+                }
+
+                    footer a:hover {
+                        color: var(--white) !important;
+                    }
+
+            .text-highlight {
+                color: var(--color-light);
             }
     </style>
 </head>
@@ -78,10 +124,11 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light sticky-top">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-bag-check-fill me-2"></i>WebBanHang
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-egg-fried me-2"></i> <span>NutriCook</span>
                 </a>
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -89,35 +136,30 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door me-1"></i>Trang chủ
+                                <i class="bi bi-house-heart me-1"></i>Trang chủ
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Recipe" asp-action="Index">
-                                <i class="bi bi-box-seam me-1"></i>Công Thức
+                                <i class="bi bi-journal-bookmark-fill me-1"></i>Công thức
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Tip" asp-action="Index">
-                                <i class="bi bi-tags me-1"></i>Tips
+                                <i class="bi bi-lightbulb me-1"></i>Mẹo hay
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="CaloCaculate" asp-action="Index">
-                                <i class="bi bi-tags me-1"></i>Tính Calo
+                                <i class="bi bi-calculator me-1"></i>Tính Calo
                             </a>
                         </li>
                     </ul>
 
-                    <div class="d-flex align-items-center">
-                        <a href="#" class="nav-link me-3"><i class="bi bi-search"></i></a>
-                        <a href="#" class="nav-link me-3 position-relative">
-                            <i class="bi bi-cart3"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                0
-                            </span>
-                        </a>
-                    </div>
+                    <form class="search-container d-none d-lg-block">
+                        <i class="bi bi-search search-icon"></i>
+                        <input type="text" class="form-control search-input" placeholder="Tìm món ngon...">
+                    </form>
                 </div>
             </div>
         </nav>
@@ -133,11 +175,19 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <p class="mb-1">&copy; 2026 - <span class="fw-bold text-primary">WebBanHang</span>. All rights reserved.</p>
-                    <div class="small">
-                        <a asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted mx-2">Chính sách bảo mật</a>
-                        <a href="#" class="text-decoration-none text-muted mx-2">Điều khoản sử dụng</a>
-                        <a href="#" class="text-decoration-none text-muted mx-2">Liên hệ</a>
+                    <h5 class="mb-3">NutriCook</h5>
+                    <p class="mb-3 opacity-75">&copy; 2026 - Tận tâm cho từng bữa ăn sức khỏe.</p>
+                    <div class="mb-3">
+                        <a asp-controller="Home" asp-action="Privacy" class="mx-2">Bảo mật</a>
+                        <span class="text-highlight">|</span>
+                        <a href="#" class="mx-2">Điều khoản</a>
+                        <span class="text-highlight">|</span>
+                        <a href="#" class="mx-2">Liên hệ</a>
+                    </div>
+                    <div class="d-flex justify-content-center gap-3 fs-4">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
                     </div>
                 </div>
             </div>
