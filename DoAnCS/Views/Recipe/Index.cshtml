@@ -1,5 +1,284 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Thư Viện Công Thức";
 }
+
+<style>
+    /* 1. THANH KHÁM PHÁ FULL-WIDTH */
+     .sticky-explore-bar {
+        position: sticky;
+        top: 70px;
+        z-index: 1020;
+        background-color: var(--color-darkest);
+/* CÔNG THỨC TRÀN VIỀN CHUẨN */
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+/* Padding & Border */
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--color-deep);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+} 
+
+    .filter-nav {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        overflow-x: auto;
+        scrollbar-width: none; 
+    }
+    .filter-nav::-webkit-scrollbar { display: none; }
+
+    .filter-link {
+        color: var(--color-light);
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        transition: 0.3s;
+        padding: 8px 15px;
+        border-radius: 20px;
+    }
+
+    .filter-link:hover, .filter-link.active {
+        color: var(--white);
+        background-color: var(--color-deep);
+    }
+
+    /* 2. BẢNG CATEGORIES  */
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+        margin-bottom: 3rem;
+        margin-top: 2rem;
+    }
+
+    .category-item {
+        background-color: var(--white);
+        border: 1px solid var(--color-pale);
+        border-radius: 12px;
+        padding: 15px 10px; 
+        text-align: center;
+        transition: 0.3s;
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--color-darkest);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 60px; 
+    }
+
+    .category-item:hover {
+        background-color: var(--color-pale);
+        transform: translateY(-3px);
+        border-color: var(--color-medium);
+    }
+
+    .category-name {
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    /* 3. RECIPE CARD */
+    .recipe-card {
+        background-color: var(--white);
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid var(--color-pale);
+        transition: 0.3s;
+        height: 100%; 
+        display: flex;
+        flex-direction: column;
+    }
+
+    .recipe-card:hover { 
+        transform: translateY(-5px); 
+        box-shadow: 0 10px 20px rgba(15, 42, 29, 0.1); 
+    }
+    
+    .recipe-img { 
+        width: 100%; 
+        aspect-ratio: 1/1; 
+        object-fit: cover; 
+    }
+
+    .recipe-info { 
+        padding: 1.2rem;
+        flex-grow: 1; 
+        display: flex;
+        flex-direction: column;
+    }
+
+    .recipe-title { 
+        font-size: 1rem; 
+        font-weight: 700; 
+        color: var(--color-darkest); 
+        margin-bottom: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.4;
+        min-height: 2.8rem; 
+    }
+
+    .recipe-meta {
+        margin-top: auto; /* Đẩy meta xuống đáy card */
+        color: var(--color-medium);
+        font-size: 0.85rem;
+    }
+    .category-item.selected {
+        background-color: var(--color-medium) !important;
+        border-color: var(--color-darkest) !important;
+        color: var(--white) !important;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .category-item.selected .category-name {
+        color: var(--white) !important;
+    }
+
+    /* Nút Lọc tổng */
+    .btn-filter-apply {
+        background-color: var(--color-darkest);
+        color: var(--color-pale);
+        border-radius: 30px;
+        padding: 10px 30px;
+        font-weight: 700;
+        transition: 0.3s;
+        border: 2px solid var(--color-darkest);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 auto; /* Căn giữa nút */
+    }
+
+    .btn-filter-apply:hover {
+        background-color: var(--color-deep);
+        color: var(--white);
+        transform: scale(1.05);
+    }
+
+    .filter-action-area {
+        margin-top: -1rem;
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h3 class="fw-bold mb-4" style="color: var(--color-darkest);">Danh mục món ăn</h3>
+            
+            <div class="category-grid" id="categoryGrid">
+                <div class="category-item" data-category="breakfast">
+                    <span class="category-name">Bữa sáng</span>
+                </div>
+                <div class="category-item" data-category="drinks">
+                    <span class="category-name">Đồ uống</span>
+                </div>
+                <div class="category-item" data-category="vegan">
+                    <span class="category-name">Ăn chay</span>
+                </div>
+                <div class="category-item" data-category="dessert">
+                    <span class="category-name">Tráng miệng</span>
+                </div>
+                <div class="category-item" data-category="sauce">
+                    <span class="category-name">Nước sốt</span>
+                </div>
+                <div class="category-item" data-category="grill">
+                    <span class="category-name">Món nướng</span>
+                </div>
+            </div>
+
+            <div class="filter-action-area">
+                <button type="button" class="btn btn-filter-apply" id="btnApplyFilter">
+                    <i class="bi bi-funnel-fill"></i> Áp dụng bộ lọc
+                </button>
+                <button type="button" class="btn btn-link btn-sm mt-2 text-muted" id="btnClearFilter">
+                    Xóa tất cả
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sticky-explore-bar">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="text-white m-0 fw-bold">Explore Dinners</h4>
+            <ul class="filter-nav">
+                <li><a href="#" class="filter-link active">Tất cả</a></li>
+                <li><a href="#" class="filter-link">Bữa Sáng</a></li>
+                <li><a href="#" class="filter-link">Bữa Trưa</a></li>
+                <li><a href="#" class="filter-link">Bữa Tối</a></li>
+                <li><a href="#" class="filter-link">Tráng Miệng</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-2 mb-5"> <div class="row g-4">
+        @for(int i=0; i<9; i++){
+            <div class="col-md-3">
+                <div class="recipe-card">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400" class="recipe-img">
+                    <div class="recipe-info">
+                        <span class="text-uppercase small fw-bold text-success mb-2 d-block">Healthy</span>
+                        <h5 class="recipe-title">
+                            @(i % 2 == 0 ? "Món ăn ngon mỗi ngày" : "Salad Ức Gà Sốt Chanh Dây Thơm Ngon Bổ Dưỡng")
+                        </h5>
+                        <div class="recipe-meta">
+                            <i class="bi bi-clock"></i> 20 mins
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const items = document.querySelectorAll('.category-item');
+        const applyBtn = document.getElementById('btnApplyFilter');
+        const clearBtn = document.getElementById('btnClearFilter');
+
+        // Xử lý click chọn nhiều mục
+        items.forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+
+        // Xử lý nút Áp dụng
+        applyBtn.addEventListener('click', function() {
+            const selectedCategories = Array.from(document.querySelectorAll('.category-item.selected'))
+                                           .map(el => el.getAttribute('data-category'));
+            
+            if(selectedCategories.length > 0) {
+                console.log("Đang lọc các mục:", selectedCategories);
+                // Tại đây bạn có thể gọi AJAX hoặc chuyển trang với QueryString
+                // window.location.href = "/Recipe/Filter?categories=" + selectedCategories.join(',');
+                alert("Đang lọc: " + selectedCategories.join(', '));
+            } else {
+                alert("Vui lòng chọn ít nhất một danh mục!");
+            }
+        });
+
+        // Xử lý nút Xóa
+        clearBtn.addEventListener('click', function() {
+            items.forEach(item => item.classList.remove('selected'));
+        });
+    });
+</script>

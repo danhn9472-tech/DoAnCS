@@ -12,46 +12,54 @@
 
     <style>
             :root {
-                /* Palette màu từ ảnh của bạn */
-                --color-darkest: #0F2A1D; /* Xanh đậm nhất - dùng cho Text tiêu đề, Hover mạnh */
-                --color-deep: #375534; /* Xanh rừng - dùng cho Brand, Button chính */
-                --color-medium: #6B9071; /* Xanh lá vừa - dùng cho Icons, Trạng thái hover */
-                --color-light: #AEC3B0; /* Xanh nhạt - dùng cho Border, Background phụ */
-                --color-pale: #E3EED4; /* Xanh kem - dùng cho Nền (Background body) */
-            
+                --color-darkest: #0F2A1D;
+                --color-deep: #375534;
+                --color-medium: #6B9071;
+                --color-light: #AEC3B0;
+                --color-pale: #E3EED4;
                 --white: #ffffff;
+            }
+
+            /* 1. SỬA LỖI FOOTER: Layout Flexbox cho toàn bộ trang */
+            html, body {
+                height: 100%;
+                margin: 0;
             }
 
             body {
                 font-family: 'Inter', sans-serif;
-                background-color: var(--color-pale); /* Màu nền nhat nhất từ palette */
+                background-color: var(--color-pale);
                 color: var(--color-darkest);
                 display: flex;
                 flex-direction: column;
-                min-height: 100vh;
+                min-height: 100vh; /* Chiều cao tối thiểu bằng 100% màn hình */
             }
 
-            /* Navbar */
-            .navbar {
-                background-color: rgba(255, 255, 255, 0.9) !important;
+            /* 2. SỬA LỖI HEADER: Cố định ở đầu trang */
+            header {
+                position: sticky;
+                top: 0;
+                z-index: 1030;
+                background-color: rgba(255, 255, 255, 0.95);
                 backdrop-filter: blur(10px);
-                box-shadow: 0 2px 10px rgba(15, 42, 29, 0.05);
-                padding: 0.8rem 0;
+                border-bottom: 1px solid var(--color-light);
+            }
+
+            .navbar {
+                padding: 0.6rem 0;
+                box-shadow: 0 2px 15px rgba(15, 42, 29, 0.08);
             }
 
             .navbar-brand {
                 font-weight: 800;
                 color: var(--color-deep) !important;
-                letter-spacing: -0.5px;
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
 
-            /* Nav Links */
             .nav-link {
                 font-weight: 600;
                 color: var(--color-deep) !important;
                 padding: 0.5rem 1rem !important;
-                margin: 0 0.2rem;
                 border-radius: 8px;
                 transition: all 0.2s ease;
             }
@@ -61,48 +69,48 @@
                     color: var(--color-darkest) !important;
                 }
 
-            /* Thanh Search mới */
+            /* Search Bar tinh chỉnh */
             .search-container {
                 position: relative;
-                max-width: 250px;
+                width: 280px;
             }
 
             .search-input {
-                background-color: var(--color-pale);
-                border: 1px solid var(--color-light);
-                border-radius: 20px;
-                padding: 0.4rem 1rem 0.4rem 2.5rem;
-                font-size: 0.9rem;
-                transition: all 0.3s;
+                background-color: var(--white);
+                border: 1.5px solid var(--color-light);
+                border-radius: 25px;
+                padding: 0.4rem 1rem 0.4rem 2.6rem;
+                font-size: 0.85rem;
             }
 
                 .search-input:focus {
-                    outline: none;
-                    box-shadow: 0 0 0 3px rgba(107, 144, 113, 0.2);
                     border-color: var(--color-medium);
-                    background-color: var(--white);
+                    box-shadow: 0 0 0 0.25rem rgba(107, 144, 113, 0.15);
+                    outline: none;
                 }
 
             .search-icon {
                 position: absolute;
-                left: 12px;
-                top: 50%;
+                left: 14px;
+                top: 52%;
                 transform: translateY(-50%);
                 color: var(--color-medium);
+                font-size: 0.9rem;
             }
 
-            /* Content Area */
+            /* 3. ĐẨY FOOTER XUỐNG: Main Container chiếm không gian còn lại */
             .main-container {
-                flex: 1;
-                padding-top: 3rem;
+                flex: 1 0 auto; /* Chiếm hết khoảng trống giữa header và footer */
+                padding-top: 2.5rem;
+                padding-bottom: 3rem;
             }
 
-            /* Footer */
+            /* Footer cố định ở đáy */
             footer {
+                flex-shrink: 0;
                 background-color: var(--color-darkest);
                 color: var(--color-pale);
-                padding: 3rem 0;
-                margin-top: auto;
+                padding: 3.5rem 0 2rem 0;
             }
 
                 footer a {
@@ -115,88 +123,101 @@
                         color: var(--white) !important;
                     }
 
-            .text-highlight {
-                color: var(--color-light);
+            .social-icons a {
+                font-size: 1.5rem;
+                margin: 0 10px;
+                opacity: 0.8;
             }
+
+                .social-icons a:hover {
+                    opacity: 1;
+                    transform: translateY(-3px);
+                    display: inline-block;
+                }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-egg-fried me-2"></i> <span>NutriCook</span>
-                </a>
+                    <img src="~/images/icon.png" alt="Logo" width="35" height="35" class="me-2">
+                        <span>NutriCook</span>
+                    </a>
                 
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <i class="bi bi-list fs-2"></i>
+                    </button>
 
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-heart me-1"></i>Trang chủ
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Recipe" asp-action="Index">
-                                <i class="bi bi-journal-bookmark-fill me-1"></i>Công thức
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Tip" asp-action="Index">
-                                <i class="bi bi-lightbulb me-1"></i>Mẹo hay
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="CaloCaculate" asp-action="Index">
-                                <i class="bi bi-calculator me-1"></i>Tính Calo
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house-heart me-1"></i>Trang chủ
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Recipe" asp-action="Index">
+                                    <i class="bi bi-journal-bookmark-fill me-1"></i>Công thức
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Tip" asp-action="Index">
+                                    <i class="bi bi-lightbulb me-1"></i>Mẹo hay
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="CaloCaculate" asp-action="Index">
+                                    <i class="bi bi-calculator me-1"></i>Tính Calo
+                                </a>
+                            </li>
+                        </ul>
 
-                    <form class="search-container d-none d-lg-block">
-                        <i class="bi bi-search search-icon"></i>
-                        <input type="text" class="form-control search-input" placeholder="Tìm món ngon...">
-                    </form>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <div class="container main-container">
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h5 class="mb-3">NutriCook</h5>
-                    <p class="mb-3 opacity-75">&copy; 2026 - Tận tâm cho từng bữa ăn sức khỏe.</p>
-                    <div class="mb-3">
-                        <a asp-controller="Home" asp-action="Privacy" class="mx-2">Bảo mật</a>
-                        <span class="text-highlight">|</span>
-                        <a href="#" class="mx-2">Điều khoản</a>
-                        <span class="text-highlight">|</span>
-                        <a href="#" class="mx-2">Liên hệ</a>
-                    </div>
-                    <div class="d-flex justify-content-center gap-3 fs-4">
-                        <a href="#"><i class="bi bi-facebook"></i></a>
-                        <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-youtube"></i></a>
+                        <form class="search-container d-none d-lg-block">
+                            <i class="bi bi-search search-icon"></i>
+                            <input type="text" class="form-control search-input" placeholder="Tìm kiếm công thức...">
+                        </form>
                     </div>
                 </div>
-            </div>
+            </nav>
+        </header>
+
+        <div class="container main-container">
+            <main role="main">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+        <footer class="text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="fw-bold mb-3" style="letter-spacing: 1px;">NutriCook</h4>
+                        <p class="mb-4 opacity-75">Cung cấp giải pháp dinh dưỡng và công thức nấu ăn lành mạnh mỗi ngày.</p>
+                    
+                        <div class="social-icons mb-4">
+                            <a href="#"><i class="bi bi-facebook"></i></a>
+                            <a href="#"><i class="bi bi-instagram"></i></a>
+                            <a href="#"><i class="bi bi-youtube"></i></a>
+                            <a href="#"><i class="bi bi-tiktok"></i></a>
+                        </div>
+
+                        <hr style="border-color: rgba(255,255,255,0.1)">
+                    
+                        <div class="mt-4 small text-uppercase fw-light">
+                            <a asp-controller="Home" asp-action="Privacy" class="mx-3">Chính sách</a>
+                            <a href="#" class="mx-3">Điều khoản</a>
+                            <a href="#" class="mx-3">Liên hệ</a>
+                        </div>
+                        <p class="mt-4 mb-0 small opacity-50">&copy; 2026 NutriCook Project. Made with <i class="bi bi-heart-fill text-danger"></i></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
 </html>
