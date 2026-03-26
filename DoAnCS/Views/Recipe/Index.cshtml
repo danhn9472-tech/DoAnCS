@@ -228,20 +228,23 @@
     </div>
 </div>
 
-<div class="container mt-2 mb-5"> <div class="row g-4">
-        @for(int i=0; i<9; i++){
+<div class="container mt-2 mb-5">
+    <div class="row g-4">
+        @for(int i=0; i<9; i++) {
             <div class="col-md-3">
                 <div class="recipe-card">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400" class="recipe-img">
-                    <div class="recipe-info">
-                        <span class="text-uppercase small fw-bold text-success mb-2 d-block">Healthy</span>
-                        <h5 class="recipe-title">
-                            @(i % 2 == 0 ? "Món ăn ngon mỗi ngày" : "Salad Ức Gà Sốt Chanh Dây Thơm Ngon Bổ Dưỡng")
-                        </h5>
-                        <div class="recipe-meta">
-                            <i class="bi bi-clock"></i> 20 mins
+                    <a asp-controller="Recipe" asp-action="Display" class="text-decoration-none">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400" class="recipe-img">
+                        <div class="recipe-info">
+                            <span class="text-uppercase small fw-bold text-success mb-2 d-block">Healthy</span>
+                            <h5 class="recipe-title">
+                                @(i % 2 == 0 ? "Món ăn ngon mỗi ngày" : "Salad Ức Gà Sốt Chanh Dây Thơm Ngon Bổ Dưỡng")
+                            </h5>
+                            <div class="recipe-meta">
+                                <i class="bi bi-clock"></i> 20 mins
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         }

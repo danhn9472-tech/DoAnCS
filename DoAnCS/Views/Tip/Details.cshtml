@@ -1,0 +1,160 @@
+﻿@model Tip
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<style>
+    /* 1. Tiêu đề - Đảm bảo đứng yên và to rõ */
+    .article-header {
+        padding: 4rem 0 2rem 0;
+        margin-bottom: 2rem;
+        text-align: center;
+        position: relative !important; /* Buộc tiêu đề đứng yên tại chỗ */
+    }
+
+    .article-category {
+        background: var(--color-pale);
+        color: var(--color-darkest);
+        padding: 8px 25px;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+        display: inline-block;
+        border: 2px solid var(--color-light);
+    }
+
+    .display-title {
+        font-weight: 900; /* Đậm hơn nữa */
+        color: var(--color-darkest);
+        line-height: 1.1;
+        margin-bottom: 2rem;
+        font-size: 4rem; /* Cực kỳ lớn cho tiêu đề chính */
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* 2. Ảnh Hero chuyên nghiệp */
+    .article-hero-box {
+        margin-bottom: 5rem;
+        padding: 0 15px;
+    }
+
+    .article-hero-img {
+        width: 100%;
+        max-height: 650px;
+        object-fit: cover;
+        border-radius: 40px; /* Bo góc mạnh hơn */
+        box-shadow: 0 25px 50px rgba(15, 42, 29, 0.15);
+    }
+
+    /* 3. Nâng cấp Nội dung chính (To và Sang trọng) */
+    .article-body-container {
+        max-width: 900px; /* Tăng nhẹ độ rộng */
+        margin: 0 auto;
+        background: white;
+        padding: 4rem; /* Thêm đệm cho khối văn bản */
+        border-radius: 35px;
+        border: 1px solid var(--color-pale);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    }
+
+    .article-content {
+        line-height: 2; /* Khoảng cách dòng thoáng đãng */
+        font-size: 1.4rem; /* Chữ lớn hơn hẳn (khoảng 22px) */
+        color: #1a1a1a;
+        white-space: pre-line;
+        letter-spacing: -0.015em;
+        text-align: justify; /* Căn đều hai bên cho chuyên nghiệp */
+    }
+
+        /* Drop cap (Chữ cái đầu dòng) lớn và nghệ thuật */
+        .article-content::first-letter {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--color-darkest);
+            float: left;
+            margin-right: 15px;
+            line-height: 0.85;
+            font-family: serif; /* Dùng font có chân cho nghệ thuật */
+        }
+
+    /* Nút Quay lại phong cách hiện đại */
+    .btn-back-magazine {
+        background: var(--color-darkest);
+        color: var(--white) !important;
+        padding: 15px 35px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        display: inline-block;
+        box-shadow: 0 10px 20px rgba(15, 42, 29, 0.2);
+    }
+
+        .btn-back-magazine:hover {
+            background: var(--color-deep);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(15, 42, 29, 0.3);
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="mb-5 text-center text-md-start">
+        <a href="/Tip" class="btn-back-magazine">
+            <i class="bi bi-arrow-left me-2"></i> Trở lại bí quyết của bạn
+        </a>
+    </div>
+
+    <article>
+        <header class="article-header">
+            <span class="article-category">@Model.Category</span>
+            <h1 class="display-title">@Model.Title</h1>
+            <div class="d-flex justify-content-center gap-4 mt-4 text-muted fs-5">
+                <span><i class="bi bi-calendar3 me-2"></i>@Model.CreatedAt.ToString("dd MMMM, yyyy")</span>
+                <span><i class="bi bi-clock me-2"></i>6 phút đọc</span>
+            </div>
+        </header>
+
+        <div class="article-hero-box text-center">
+            <img src="@Model.ImageUrl" class="article-hero-img" alt="@Model.Title" />
+        </div>
+
+        <div class="article-body-container">
+            <div class="article-content">
+                @Model.Content
+            </div>
+
+            <div class="d-flex flex-column align-items-center gap-4 mt-5 pt-5 border-top">
+                <span class="fw-bold fs-4" style="color: var(--color-darkest)">Thấy bí quyết này hữu ích?</span>
+                <div class="d-flex gap-3">
+                    <a href="#" class="btn btn-lg btn-outline-dark rounded-circle"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="btn btn-lg btn-outline-dark rounded-circle"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="btn btn-lg btn-outline-dark rounded-circle"><i class="bi bi-chat-dots"></i></a>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <section class="related-tips-section mb-5 mt-5 pt-5 border-top">
+        <h3 class="fw-bold mb-4 text-center fs-2" style="color: var(--color-darkest);">Khám phá thêm bí quyết khác</h3>
+        <div class="row g-4">
+            @for (int i = 1; i <= 3; i++)
+            {
+                <div class="col-md-4">
+                    <a href="#" class="related-card text-decoration-none">
+                        <div class="card border-0 rounded-4 overflow-hidden shadow-sm">
+                            <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500" class="card-img-top" style="height: 200px; object-fit: cover;" />
+                            <div class="card-body p-4">
+                                <h6 class="fw-bold fs-5 text-dark m-0">Bí quyết bảo quản thực phẩm sạch trong mùa hè @i</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </section>
+</div>

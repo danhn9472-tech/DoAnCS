@@ -8,5 +8,9 @@ namespace DoAnCS.Controllers
         {
             return View();
         }
+        public IActionResult Display()
+        {
+            return View(); 
+        }
     }
 }
